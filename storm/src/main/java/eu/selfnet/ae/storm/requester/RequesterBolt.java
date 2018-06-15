@@ -11,6 +11,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.http.utils.Base64Coder;
 import eu.selfnet.ae.conf_reader.ConfReader;
 import eu.selfnet.ae.db_model.dao.ActionDAO;
 import eu.selfnet.ae.db_model.dao.TacticDAO;
@@ -79,6 +80,7 @@ public class RequesterBolt extends BaseRichBolt {
 
             HttpResponse<JsonNode> response = Unirest.post(this.host)
                     .header("Content-Type", "application/json")
+                    .header("Authorization", "Basic " + Base64Coder.encodeString("user_TESTING" + ":" + "user_TESTING"))
                     .body(orRequest.toJson())
                     .asJson();
 

@@ -11,7 +11,9 @@ public class Service {
 
     private String category;
     private String description;
+    private String id;
     private List<ServiceCharacteristic> serviceCharacteristic;
+    private List<Resource> resource;
 
     public Service(){
     }
@@ -27,17 +29,36 @@ public class Service {
     public String getDescription() {
         return description;
     }
+    
+    public String getId() {
+        return id;
+    }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public void setId(String id) {
+        this.id = id;
     }
 
     public List<ServiceCharacteristic> getServiceCharacteristic() {
         return serviceCharacteristic;
     }
+    
+    
 
     public void setServiceCharacteristic(List<ServiceCharacteristic> serviceCharacteristic) {
         this.serviceCharacteristic = serviceCharacteristic;
     }
+    
+    public List<Resource> getResource() {
+        return resource;
+    }
+    
+    public void setResource(List<Resource> resource) {
+        this.resource = resource;
+    }
+
 
 }

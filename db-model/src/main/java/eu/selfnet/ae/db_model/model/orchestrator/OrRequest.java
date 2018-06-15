@@ -10,9 +10,11 @@ import java.util.List;
 
 public class OrRequest {
 
+    private String externalId;
     private String description;
     private String category;
     private String requesterCallback;
+    private String id;
     private List<OrderItem> orderItem;
 
     public OrRequest() {
@@ -22,6 +24,10 @@ public class OrRequest {
         return new Gson().toJson(this);
     }
 
+    public String getExternalID() {
+        return externalId;
+    }
+    
     public String getDescription() {
         return description;
     }
@@ -33,9 +39,21 @@ public class OrRequest {
     public String getCategory() {
         return category;
     }
+    
+    public String getID() {
+        return id;
+    }
 
+    public void setExternalID(String externalId) {
+        this.externalId = externalId;
+    }
+    
     public void setCategory(String category) {
         this.category = category;
+    }
+    
+    public void setID(String id) {
+        this.id = id;
     }
 
     public String getRequesterCallback() {

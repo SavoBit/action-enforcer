@@ -70,11 +70,11 @@ public class ActionContextTypeBolt extends BaseRichBolt {
         // Hardcoded resolution based on action operation
         // Based on E2EO Specification for SELFNET v1.0
         ActionDTO dto = GSON.fromJson(a.getActionDto(), ActionDTO.class);
-        if (dto.getActionOption().getOperation().contains("Flow")) {
-            a.setActionContextType("CFS.IM");
-        } else {
-            a.setActionContextType("CFS.IM");
-        }
+//        if (dto.getActionOption().getOperation().contains("Flow") ) { //|| dto.getActionOption().getOperation().contains("modify") || dto.getActionOption().getOperation().contains("eploy")) {
+//          a.setActionContextType("CFS.IM");
+//        } else {
+//            a.setActionContextType("CFS.IM");
+//        }
         // Hardcoded context ID
         a.setActionContextID(a.getTactic().getContextId());
 
