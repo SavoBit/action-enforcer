@@ -14,6 +14,14 @@ public class Component {
     private String name;
     private SecondComponent component;
     
+    public Component(){
+    
+    }
+    public Component(String name, SecondComponent component){
+    this.name = name;
+    this.component = component;
+    }
+    
     public String getName() {
         return name;
     }

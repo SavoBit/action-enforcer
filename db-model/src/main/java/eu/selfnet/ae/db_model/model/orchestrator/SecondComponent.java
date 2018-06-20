@@ -17,6 +17,15 @@ public class SecondComponent {
     private String type;
     private List<PropertyForComponent> property;
     
+    public SecondComponent(){
+    
+    }
+    public SecondComponent(String id, String type, List<PropertyForComponent> property){
+    this.id = id;
+    this.type = type;
+    this.property = property;
+    }
+    
     public String getId() {
         return id;
     }

@@ -474,10 +474,10 @@ private OrRequest convertActionToSORequest(Action a) throws NoSuchFieldError {
         Resource resource = new Resource();
         SecondResource sResource = new SecondResource();
         List<Property> property = new ArrayList<>();
-        List<PropertyForComponent> propertyForComponent = new ArrayList<>();
-        Component component = new Component();
+        
+        
         List<Component> components = new ArrayList<>();
-        SecondComponent sComponent = new SecondComponent();
+        
         
         // Set externalID
         String externalID;
@@ -486,7 +486,7 @@ private OrRequest convertActionToSORequest(Action a) throws NoSuchFieldError {
  
         request.setCategory("monitoring");
         request.setDescription("Infrastructure Monitoring Service Order");
-        request.setID("TBD");
+        request.setID(dto.getActionOption().getId());
         
         // Set callback
         String host = this.config.getSection("REST_CLIENT").get("host");
@@ -553,31 +553,11 @@ private OrRequest convertActionToSORequest(Action a) throws NoSuchFieldError {
         
         if ("FCA".equals(app)){
         
-//        property.add(new Property("encapsulationLayer", "0"));
-//        property.add(new Property("layer3Protocol", "TBD"));
-//        property.add(new Property("srcIpAddress", "1.1.1.1"));
-//        property.add(new Property("dstIpAddress", "1.1.1.1"));
-//        property.add(new Property("layer4Protocol", "00"));
-//        property.add(new Property("srcPort", "1111"));
-//        property.add(new Property("dstPort", "1111"));
-//        property.add(new Property("layer7Protocol", "TBD"));
-//        property.add(new Property("completePacketStructure", "TBD"));
-        
-        
-        configuration.stream().forEach((p) -> {
+         configuration.stream().forEach((p) -> { 
 
         switch (p.getName()) {
             case "encapsulationLayer":
-                property.add(new Property("encapsulationLayer", p.getValue()));
-                if (p.getValue() != "0"){
-                    component.setName("TBD");
-                    sComponent.setId("TBD");
-                    sComponent.setType("TBD");
-                    propertyForComponent.add(new PropertyForComponent("id","TBD"));
-                    propertyForComponent.add(new PropertyForComponent("type","TBD"));
-                    sComponent.setProperty(propertyForComponent); 
-                    component.setComponent(sComponent);
-                } 
+                property.add(new Property("encapsulationLayer", p.getValue())); 
                 break;
             case "l3Proto":
                 property.add(new Property("layer3Protocol", p.getValue()));
@@ -606,10 +586,10 @@ private OrRequest convertActionToSORequest(Action a) throws NoSuchFieldError {
             case "packetStructure":
                 property.add(new Property("packetStructure", p.getValue()));
                 break;
-            case "srcMacAddress":
+            case "macSrc":
                 property.add(new Property("srcMacAddress", p.getValue()));
                 break;
-            case "dstMacAddress":
+            case "macDst":
                 property.add(new Property("dstMacAddress", p.getValue()));
                 break;
             case "parentResourceId":
@@ -627,6 +607,9 @@ private OrRequest convertActionToSORequest(Action a) throws NoSuchFieldError {
             case "ServiceID":
                 s.setId(p.getValue());
                 break;
+             case "resourceId":
+                sResource.setId(p.getValue());
+                break; 
             default:
                 break;
         }
@@ -635,43 +618,56 @@ private OrRequest convertActionToSORequest(Action a) throws NoSuchFieldError {
             
         }
        
-        property.add(new Property("layer3Protocol", "19"));
-        property.add(new Property("packetStructure", "/ip4:20/udp:8"));
-        property.add(new Property("srcMacAddress", "00:23:22:24:2c:90"));
-        property.add(new Property("dstMacAddress", "00:23:24:14:57:cc"));
-        property.add(new Property("parentResourceId", "TBD"));
-        property.add(new Property("reporterId", "TBD"));
-        property.add(new Property("resourceAbstractionLayer", "7"));
-        property.add(new Property("state", "TBD"));
+        property.add(new Property("action", dto.getActionOption().getTypeOfOption()));
        
     configuration.stream().forEach((p) -> {
-
-        
-
-        if (p.getName().contains("l7K")){
-            component.setName("layer7Key" + p.getName().substring(p.getName().length() - 1));
-            sComponent.setId(p.getName().substring(p.getName().length() - 1));
-            sComponent.setType("layer7Key");
+ 
+        if (p.getName().contains("encapsulationID")){
+            List<PropertyForComponent> propertyForComponent = new ArrayList<>();
             propertyForComponent.add(new PropertyForComponent("id",p.getValue()));
-            sComponent.setProperty(propertyForComponent);
-            component.setComponent(sComponent);
+            String match;
+            match = p.getName().substring(p.getName().length() - 1);
+            configuration.stream().filter((t) -> (t.getName().equals("encapsulationType" + match))).forEach((t) -> {
+            
+            propertyForComponent.add(new PropertyForComponent("type",t.getValue()));
+            });
+            components.add(new Component("encapsulation" + p.getName().substring(p.getName().length() - 1), new SecondComponent(p.getName().substring(p.getName().length() - 1), "Encapsulation", propertyForComponent)));
+            return;
         }
+        else {
+                return;
+            } 
+        
+    });
+    
+    configuration.stream().forEach((p) -> {
+        
+            if (p.getName().contains("l7K")){
+                List<PropertyForComponent> propertyForComponent = new ArrayList<>();
+                propertyForComponent.add(new PropertyForComponent("id",p.getValue()));
+                components.add(new Component("layer7Key" + p.getName().substring(p.getName().length() - 1), new SecondComponent(p.getName().substring(p.getName().length() - 1), "layer7Key", propertyForComponent)));
+                return; 
+            }
+            else {
+                return;
+            }
+        
     });
     
     
-        propertyForComponent.add(new PropertyForComponent("id","TBD"));
-        propertyForComponent.add(new PropertyForComponent("type","TBD"));
+        //propertyForComponent.add(new PropertyForComponent("id","TBD"));
+        //propertyForComponent.add(new PropertyForComponent("type","TBD"));
 
-        sComponent.setId("TBD");
-        sComponent.setType("TBD");
-        sComponent.setProperty(propertyForComponent);
+        //sComponent.setId("TBD");
+        //sComponent.setType("TBD");
+        //sComponent.setProperty(propertyForComponent);
 
-        component.setName("TBD");
-        component.setComponent(sComponent);
-        components.add(component);
+        //component.setName("TBD");
+        //component.setComponent(sComponent);
+        //components.add(component);
 
 
-        sResource.setId("TBD");
+        
         sResource.setType("LR.FLOW");
         sResource.setProperty(property);
         sResource.setComponent(components);
